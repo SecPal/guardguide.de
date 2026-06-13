@@ -11,8 +11,8 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo -e "${BLUE}=== Domain Policy Check ===${NC}"
-echo "Allowed: guardguide.de, www.guardguide.de"
-echo "Forbidden: stale secpal.* domains and any alternative public hostnames"
+echo "Allowed: guardguide.de, www.guardguide.de, *.preview.secpal.dev"
+echo "Forbidden: stale secpal.* production domains and any alternative public hostnames"
 echo ""
 
 matches=$(grep -r -n -E "(guardguide|secpal)\.[A-Za-z0-9.-]+" \
@@ -33,12 +33,13 @@ matches=$(grep -r -n -E "(guardguide|secpal)\.[A-Za-z0-9.-]+" \
     --exclude-dir="dist" \
     --exclude-dir=".astro" \
     . 2>/dev/null | \
+    grep -v -- "polyscope.local.json" | \
     grep -v -- "check-domains.sh" | \
     grep -v -- "Forbidden:" | \
     grep -v -- "FORBIDDEN:" || true)
 
 violations=$(printf '%s\n' "$matches" | \
-    grep -Ev '(^|[^A-Za-z0-9.-])guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])guardguide\.de\.git($|[^A-Za-z0-9._-]|\.$)|(^|[^A-Za-z0-9.-])www\.guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)' || true)
+    grep -Ev '(^|[^A-Za-z0-9.-])guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])guardguide\.de\.git($|[^A-Za-z0-9._-]|\.$)|(^|[^A-Za-z0-9.-])www\.guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])([A-Za-z0-9-]+\.)?preview\.secpal\.dev($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)' || true)
 
 if [[ -z "$violations" ]]; then
     echo -e "${GREEN}✅ Domain Policy Check PASSED${NC}"
@@ -54,7 +55,8 @@ echo ""
 echo -e "${YELLOW}Policy:${NC}"
 echo "  - guardguide.de: public production host and real email addresses"
 echo "  - www.guardguide.de: redirect-only alias"
-echo "  - FORBIDDEN: stale secpal.* domains and any alternative public hostnames"
+echo "  - *.preview.secpal.dev: allowed only for generated PolyScope preview configuration"
+echo "  - FORBIDDEN: stale secpal.* production domains and any alternative public hostnames"
 echo ""
 echo "Fix these violations before committing."
 exit 1

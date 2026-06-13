@@ -26,7 +26,7 @@ Please describe the checks that you ran to verify your changes.
 
 ## Checklist
 
-- [ ] My change follows the repository conventions and domain policy (`secpal.app` / `secpal.dev` only)
+- [ ] My change follows the repository conventions and domain policy (`guardguide.de`, `www.guardguide.de`, and PolyScope preview hosts only where required)
 - [ ] I performed a self-review of the affected content, code, and workflows
 - [ ] I updated documentation and `CHANGELOG.md` when required
 - [ ] My change introduces no new warnings in the validations above
