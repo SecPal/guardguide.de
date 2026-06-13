@@ -1,0 +1,59 @@
+---
+// SPDX-FileCopyrightText: 2026 SecPal
+// SPDX-License-Identifier: AGPL-3.0-or-later
+import LegalPageShell from "../../components/LegalPageShell.astro";
+---
+
+<LegalPageShell
+  locale="en"
+  title="Legal Notice | GuardGuide"
+  description="Provider information and direct contact routes for guardguide.de."
+  canonicalPath="/en/imprint/"
+  currentPath="/imprint"
+  eyebrow="Legal"
+  headline="Legal Notice"
+  intro="Provider information and direct contact routes for guardguide.de."
+  updatedLabel="Last updated"
+  updatedAt="March 21, 2026"
+>
+  <section class="space-y-10">
+    <div>
+      <h2
+        class="text-3xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white"
+      >
+        Provider
+      </h2>
+      <div
+        class="mt-6 rounded-2xl border border-gray-200 p-6 dark:border-white/10"
+      >
+        <p class="font-semibold text-gray-900 dark:text-white">GuardGuide</p>
+        <p class="mt-2">Holger Schmermbeck</p>
+        <p class="mt-2">Enno-Arends-Str. 4</p>
+        <p class="mt-2">26571 Juist</p>
+        <p class="mt-2">Germany</p>
+      </div>
+    </div>
+
+    <div>
+      <h2
+        class="text-3xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white"
+      >
+        Contact
+      </h2>
+      <p class="mt-6">
+        Email: <a
+          href="mailto:hello@guardguide.de"
+          class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+          >hello@guardguide.de</a
+        >
+      </p>
+      <p class="mt-4">
+        Security reports: <a
+          href="mailto:security@guardguide.de"
+          class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+          >security@guardguide.de</a
+        >
+      </p>
+    </div>
+  </section>
+</LegalPageShell>

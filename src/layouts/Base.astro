@@ -1,0 +1,140 @@
+---
+// SPDX-FileCopyrightText: 2026 SecPal
+// SPDX-License-Identifier: AGPL-3.0-or-later
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: string;
+  canonicalPath?: string;
+  alternateEnPath?: string;
+  alternateDePath?: string;
+  xDefaultPath?: string;
+  socialImagePath?: string;
+  socialImageAlt?: string;
+}
+
+const {
+  title,
+  description,
+  lang,
+  canonicalPath,
+  alternateEnPath = "/en/",
+  alternateDePath = "/de/",
+  xDefaultPath,
+  socialImagePath,
+  socialImageAlt,
+} = Astro.props;
+const siteUrl = Astro.site ?? new URL("https://guardguide.de");
+const canonicalUrl = canonicalPath
+  ? new URL(canonicalPath, siteUrl).toString()
+  : undefined;
+const alternateEnUrl = new URL(alternateEnPath, siteUrl).toString();
+const alternateDeUrl = new URL(alternateDePath, siteUrl).toString();
+const xDefaultUrl = new URL(
+  xDefaultPath ?? alternateEnPath,
+  siteUrl
+).toString();
+const socialImageUrl = (() => {
+  const defaultPath = lang === "de" ? "/og-de.png" : "/og-default.png";
+  const trimmedPath = socialImagePath?.trim();
+  const imagePath =
+    trimmedPath && trimmedPath.length > 0 ? trimmedPath : defaultPath;
+
+  let url: URL;
+  try {
+    url = new URL(imagePath, siteUrl);
+  } catch {
+    return new URL(defaultPath, siteUrl).toString();
+  }
+
+  if (url.protocol === "http:" || url.protocol === "https:") {
+    return url.toString();
+  }
+
+  return new URL(defaultPath, siteUrl).toString();
+})();
+const ogLocale = lang === "de" ? "de_DE" : "en_US";
+const ogAlternateLocale = lang === "de" ? "en_US" : "de_DE";
+const socialAlt =
+  socialImageAlt ??
+  (lang === "de"
+    ? "GuardGuide Vorschaukarte mit Logo und dem Hinweis auf klarere Abläufe im Sicherheitsdienst."
+    : "GuardGuide preview card with logo and the promise of clearer workflows in security operations.");
+const previewUrl = canonicalUrl ?? xDefaultUrl;
+---
+
+<!doctype html>
+<html lang={lang} class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:site_name" content="GuardGuide" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={previewUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogAlternateLocale} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:url" content={socialImageUrl} />
+    <meta property="og:image:secure_url" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialAlt} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/icons/favicon.ico"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/icons/favicon.ico"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="alternate" hreflang="en" href={alternateEnUrl} />
+    <link rel="alternate" hreflang="de" href={alternateDeUrl} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+    <slot name="head" />
+    <!-- Dark mode: runs before first paint to prevent flash -->
+    <script is:inline>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+          var btn = document.getElementById("dark-toggle");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              var isDark = document.documentElement.classList.toggle("dark");
+              localStorage.setItem("theme", isDark ? "dark" : "light");
+            });
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
+    <slot />
+  </body>
+</html>

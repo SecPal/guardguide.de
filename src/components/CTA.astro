@@ -1,0 +1,77 @@
+---
+// SPDX-FileCopyrightText: 2026 SecPal
+// SPDX-FileCopyrightText: Tailwind Labs Inc.
+// SPDX-License-Identifier: AGPL-3.0-or-later AND LicenseRef-TailwindPlus
+import type { Locale } from "../i18n/index.ts";
+import { useTranslations } from "../i18n/index.ts";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div id="updates" class="bg-white py-16 sm:py-24 dark:bg-gray-900">
+  <div class="mx-auto max-w-7xl px-6 sm:px-6 lg:px-8">
+    <div
+      class="relative isolate overflow-hidden bg-slate-950 px-6 py-20 shadow-2xl sm:rounded-3xl sm:px-12 xl:px-24 dark:shadow-none dark:after:pointer-events-none dark:after:absolute dark:after:inset-0 dark:after:inset-ring dark:after:inset-ring-white/15 dark:after:sm:rounded-3xl"
+    >
+      <div class="mx-auto max-w-3xl text-center">
+        <h2
+          class="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl"
+        >
+          {t.cta.headline}
+        </h2>
+        <p class="mx-auto mt-6 max-w-2xl text-lg/8 text-pretty text-gray-300">
+          {t.cta.subline}
+        </p>
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="https://github.com/SecPal/guardguide.de"
+            class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:shadow-none"
+            >{t.cta.button}</a
+          >
+          <a
+            href="mailto:hello@guardguide.de"
+            class="text-sm/6 font-semibold text-white hover:text-gray-200"
+            >{t.cta.buttonSecondary} <span aria-hidden="true">→</span></a
+          >
+        </div>
+        {
+          t.cta.note && (
+            <p class="mx-auto mt-6 max-w-xl text-sm/6 text-gray-400">
+              {t.cta.note}
+            </p>
+          )
+        }
+      </div>
+      <svg
+        viewBox="0 0 1024 1024"
+        aria-hidden="true"
+        class="absolute top-1/2 left-1/2 -z-10 size-256 -translate-x-1/2"
+      >
+        <circle
+          r="512"
+          cx="512"
+          cy="512"
+          fill="url(#secpal-cta-gradient)"
+          fill-opacity="0.7"></circle>
+        <defs>
+          <radialGradient
+            id="secpal-cta-gradient"
+            r="1"
+            cx="0"
+            cy="0"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(512 512) rotate(90) scale(512)"
+          >
+            <stop stop-color="#2563EB"></stop>
+            <stop offset="1" stop-color="#0F766E" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</div>

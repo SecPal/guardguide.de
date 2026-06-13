@@ -1,0 +1,219 @@
+#!/bin/bash
+# SPDX-FileCopyrightText: 2026 SecPal
+# SPDX-License-Identifier: MIT
+
+set -euo pipefail
+
+DEFAULT_DEPLOY_ROOT="/home/secpal/www/guardguide.de"
+PRIMARY_URL="${GUARDGUIDE_PRIMARY_URL:-https://guardguide.de}"
+PRIMARY_WWW_URL="${GUARDGUIDE_PRIMARY_WWW_URL:-https://www.guardguide.de}"
+SKIP_NGINX_VALIDATION="${GUARDGUIDE_SKIP_NGINX_VALIDATION:-0}"
+NGINX_BIN="${NGINX_BIN:-$(command -v nginx 2>/dev/null || true)}"
+
+if [[ -z "$NGINX_BIN" && -x "/usr/sbin/nginx" ]]; then
+    NGINX_BIN="/usr/sbin/nginx"
+fi
+
+usage() {
+    cat <<'EOF'
+Usage: ./scripts/check-stable.sh [--skip-nginx-validation] [deploy-root]
+
+Verifies the stable guardguide.de deployment layout, validates Nginx, and checks
+the live HTTPS and redirect behavior of the public domains.
+
+Arguments:
+  [deploy-root]  Optional deployment root (default: /home/secpal/www/guardguide.de)
+
+Options:
+    --skip-nginx-validation  Skip `nginx -t`
+
+Environment overrides:
+  GUARDGUIDE_PRIMARY_URL         Default: https://guardguide.de
+  GUARDGUIDE_PRIMARY_WWW_URL     Default: https://www.guardguide.de
+  GUARDGUIDE_SKIP_NGINX_VALIDATION  Set to 1 to skip `nginx -t`
+
+Examples:
+  ./scripts/check-stable.sh
+    ./scripts/check-stable.sh --skip-nginx-validation
+  ./scripts/check-stable.sh /srv/www/guardguide.de
+EOF
+}
+
+log() {
+    printf '[check-stable] %s\n' "$1"
+}
+
+fail() {
+    printf '[check-stable] ERROR: %s\n' "$1" >&2
+    exit 1
+}
+
+require_command() {
+    command -v "$1" >/dev/null 2>&1 || fail "Required command not found: $1"
+}
+
+run_privileged() {
+    if [[ "$(id -u)" -eq 0 ]]; then
+        "$@"
+        return
+    fi
+
+    require_command sudo
+    sudo "$@"
+}
+
+assert_symlink() {
+    local path="$1"
+
+    [[ -L "$path" ]] || fail "Expected symlink is missing: $path"
+}
+
+assert_directory() {
+    local path="$1"
+
+    [[ -d "$path" ]] || fail "Expected directory is missing: $path"
+}
+
+assert_file() {
+    local path="$1"
+
+    [[ -f "$path" ]] || fail "Expected file is missing: $path"
+}
+
+assert_redirect() {
+    local source_url="$1"
+    local expected_location="$2"
+    local response
+    local status_code
+    local redirect_url
+
+    response="$(curl --silent --show-error --connect-timeout 10 --max-time 30 --output /dev/null --max-redirs 0 --write-out '%{http_code} %{redirect_url}' "$source_url")" \
+        || fail "curl failed for $source_url: connection or timeout error"
+    status_code="${response%% *}"
+    redirect_url="${response#* }"
+
+    [[ "$status_code" =~ ^30[1278]$ ]] || fail "Expected redirect from $source_url, got HTTP $status_code"
+    [[ "$redirect_url" == "$expected_location" ]] || fail "Unexpected redirect from $source_url: $redirect_url"
+
+    log "Verified redirect: $source_url -> $redirect_url"
+}
+
+assert_locale_redirect() {
+    local source_url="$1"
+    local accept_language="$2"
+    local expected_location="$3"
+    local response
+    local status_code
+    local redirect_url
+
+    response="$(curl --silent --show-error --connect-timeout 10 --max-time 30 --output /dev/null --max-redirs 0 --header "Accept-Language: $accept_language" --write-out '%{http_code} %{redirect_url}' "$source_url")" \
+        || fail "curl failed for $source_url with Accept-Language '$accept_language': connection or timeout error"
+    status_code="${response%% *}"
+    redirect_url="${response#* }"
+
+    [[ "$status_code" =~ ^30[1278]$ ]] || fail "Expected locale redirect from $source_url, got HTTP $status_code"
+    [[ "$redirect_url" == "$expected_location" ]] || fail "Unexpected locale redirect from $source_url for '$accept_language': $redirect_url"
+
+    log "Verified locale redirect: $source_url [$accept_language] -> $redirect_url"
+}
+
+assert_http_ok() {
+    local url="$1"
+    local status_code
+
+    status_code="$(curl --silent --show-error --connect-timeout 10 --max-time 30 --location --output /dev/null --write-out '%{http_code}' "$url")" \
+        || fail "curl failed for $url: connection or timeout error"
+    [[ "$status_code" == "200" ]] || fail "Expected HTTP 200 for $url, got $status_code"
+
+    log "Verified HTTP 200: $url"
+}
+
+assert_http_ok_on_host() {
+    local url="$1"
+    local expected_origin="$2"
+    local result status_code effective_url
+
+    result="$(curl --silent --show-error --connect-timeout 10 --max-time 30 \
+        --location --output /dev/null \
+        --write-out '%{http_code} %{url_effective}' "$url")" \
+        || fail "curl failed for $url: connection or timeout error"
+    status_code="${result%% *}"
+    effective_url="${result#* }"
+    [[ "$status_code" == "200" ]] || fail "Expected HTTP 200 for $url, got $status_code"
+    [[ "$effective_url" == "$expected_origin"* ]] \
+        || fail "Effective URL $effective_url is not under expected origin $expected_origin"
+
+    log "Verified HTTP 200: $url"
+}
+
+validate_nginx_config() {
+    if [[ "$SKIP_NGINX_VALIDATION" == "1" ]]; then
+        log "Skipping nginx validation because GUARDGUIDE_SKIP_NGINX_VALIDATION=1"
+        return
+    fi
+
+    if "$NGINX_BIN" -t >/dev/null; then
+        return
+    fi
+
+    run_privileged "$NGINX_BIN" -t >/dev/null
+}
+
+DEPLOY_ROOT="$DEFAULT_DEPLOY_ROOT"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --skip-nginx-validation)
+            SKIP_NGINX_VALIDATION="1"
+            shift
+            ;;
+        *)
+            if [[ "$DEPLOY_ROOT" != "$DEFAULT_DEPLOY_ROOT" ]]; then
+                usage
+                exit 1
+            fi
+
+            DEPLOY_ROOT="$1"
+            shift
+            ;;
+    esac
+done
+
+CURRENT_LINK="$DEPLOY_ROOT/current"
+PREVIOUS_LINK="$DEPLOY_ROOT/previous"
+
+require_command curl
+require_command readlink
+if [[ "$SKIP_NGINX_VALIDATION" != "1" ]]; then
+    [[ -n "$NGINX_BIN" && -x "$NGINX_BIN" ]] || fail "Required command not found: nginx"
+fi
+
+assert_symlink "$CURRENT_LINK"
+assert_symlink "$PREVIOUS_LINK"
+
+CURRENT_TARGET="$(readlink -f "$CURRENT_LINK")"
+PREVIOUS_TARGET="$(readlink -f "$PREVIOUS_LINK")"
+CURRENT_RELEASE_DIR="$(cd "$CURRENT_TARGET/.." && pwd)"
+
+assert_directory "$CURRENT_TARGET"
+assert_directory "$PREVIOUS_TARGET"
+assert_file "$CURRENT_TARGET/index.html"
+assert_file "$CURRENT_TARGET/en/index.html"
+assert_file "$CURRENT_TARGET/de/index.html"
+assert_file "$CURRENT_RELEASE_DIR/RELEASE.txt"
+
+log "Current release: $CURRENT_TARGET"
+log "Previous release: $PREVIOUS_TARGET"
+log "Validating nginx configuration"
+validate_nginx_config
+
+assert_redirect "$PRIMARY_URL/" "$PRIMARY_URL/en/"
+assert_http_ok "$PRIMARY_URL/en/"
+assert_http_ok "$PRIMARY_URL/de/"
+assert_redirect "$PRIMARY_WWW_URL/" "$PRIMARY_URL/"
+
+log "Stable deployment health check passed"
