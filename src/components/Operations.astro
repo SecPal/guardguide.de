@@ -34,7 +34,7 @@ const t = useTranslations(locale);
         <dl class="mt-10 grid gap-6 sm:grid-cols-2">
           {
             t.operations.items.map((item, index) => (
-              <div class={index === 2 ? "sm:col-span-2" : ""}>
+              <div class={index === 2 ? "sm:col-span-2" : undefined}>
                 <dt class="text-base/7 font-semibold text-gray-900 dark:text-white">
                   {item.name}
                 </dt>

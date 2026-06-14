@@ -39,7 +39,7 @@ matches=$(grep -r -n -E "(guardguide|secpal)\.[A-Za-z0-9.-]+" \
     grep -v -- "FORBIDDEN:" || true)
 
 violations=$(printf '%s\n' "$matches" | \
-    grep -Ev '(^|[^A-Za-z0-9.-])guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])guardguide\.de\.git($|[^A-Za-z0-9._-]|\.$)|(^|[^A-Za-z0-9.-])www\.guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])([A-Za-z0-9-]+\.)?preview\.secpal\.dev($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)' || true)
+    grep -Ev '(^|[^A-Za-z0-9.-])guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])guardguide\.de\.git($|[^A-Za-z0-9._-]|\.$)|(^|[^A-Za-z0-9.-])www\.guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])[A-Za-z0-9-]+\.preview\.secpal\.dev($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)' || true)
 
 if [[ -z "$violations" ]]; then
     echo -e "${GREEN}✅ Domain Policy Check PASSED${NC}"

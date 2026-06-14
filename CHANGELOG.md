@@ -10,3 +10,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - bootstrap the public `guardguide.de` Astro site from the existing SecPal website stack
 - switch repository metadata, deployment scripts, and public legal/security pages to `guardguide.de`
 - remove the copied Android distribution surface so this repository stays scoped to the GuardGuide promo site
+- expand landing page with Operations, Principles, and RoadmapPreview sections (EN + DE)
+- add hero explanation paragraph, bullet highlights, and pre-launch note to both locale home pages
+- add features subline to the Features section
+- fix `security.txt` fallback host from `secpal.app` to `guardguide.de` with GuardGuide-specific disclosure wording
+- replace locale-unaware root redirect check with Accept-Language-aware assertions for `/en/` and `/de/`
+- align repo-local governance files (Copilot instructions overlay, PR template, workflow comments) with `guardguide.de` branding
+- allow `*.preview.secpal.dev` in domain check CI while continuing to block stale `secpal.*` production domains
