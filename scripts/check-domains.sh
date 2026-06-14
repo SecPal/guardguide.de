@@ -33,8 +33,8 @@ matches=$(grep -r -n -E "(guardguide|secpal)\.[A-Za-z0-9.-]+" \
     --exclude-dir="node_modules" \
     --exclude-dir="dist" \
     --exclude-dir=".astro" \
+    --exclude="polyscope.local.json" \
     . 2>/dev/null | \
-    grep -v -- "polyscope.local.json" | \
     grep -v -- "check-domains.sh" | \
     grep -v -- "Forbidden:" | \
     grep -v -- "FORBIDDEN:" || true)
