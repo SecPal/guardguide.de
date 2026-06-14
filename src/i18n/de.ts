@@ -116,7 +116,8 @@ export const de: Translations = {
   },
   roadmapPreview: {
     eyebrow: "Öffentliche Richtung",
-    headline: "Ein klarer Pfad, ohne so zu tun, als wäre das Produkt schon fertig.",
+    headline:
+      "Ein klarer Pfad, ohne so zu tun, als wäre das Produkt schon fertig.",
     intro:
       "GuardGuide ist noch früh. Die Roadmap ist öffentlich, damit aktueller Fokus, nächste Schritte und längerfristige Richtung klar nachvollziehbar bleiben.",
     button: "Vollständige Roadmap öffnen",

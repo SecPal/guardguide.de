@@ -56,7 +56,8 @@ export const en = {
   },
   operations: {
     eyebrow: "Operational fit",
-    headline: "Built for private security services that need one dependable operating model.",
+    headline:
+      "Built for private security services that need one dependable operating model.",
     intro:
       "GuardGuide is aimed at teams that run recurring site operations, patrols, handovers, event documentation, and service instructions under real day-to-day pressure.",
     items: [
