@@ -56,6 +56,71 @@ export const de: Translations = {
       },
     ],
   },
+  operations: {
+    eyebrow: "Operativer Fit",
+    headline:
+      "Für Sicherheitsdienste gebaut, die ein verlässliches Betriebsmodell statt Stückwerk brauchen.",
+    intro:
+      "GuardGuide richtet sich an Teams, die wiederkehrende Objektabläufe, Kontrollgänge, Schichtübergaben, Ereignisdokumentation und Dienstanweisungen unter echtem Tagesdruck organisieren müssen.",
+    items: [
+      {
+        name: "Dienstanweisungen dort, wo die Arbeit passiert",
+        description:
+          "Objektbezogene Anweisungen bleiben direkt mit Objekt, Schicht und Aufgabe verknüpft statt in losgelösten PDFs und Nachrichtenverläufen zu enden.",
+      },
+      {
+        name: "Außendiensttaugliche Abläufe für geteilte Geräte",
+        description:
+          "Die operative Oberfläche wird für Einsatzleitung, Disposition und operative Kräfte gestaltet, die häufig mit geteilten oder eingeschränkten Geräten arbeiten.",
+      },
+      {
+        name: "Nachvollziehbare Vorgänge und Übergaben",
+        description:
+          "Ereignisnotizen, Kontrollgänge und Schichtübergaben bleiben zuordenbar und prüfbar, statt später rekonstruiert werden zu müssen.",
+      },
+    ],
+    panel: {
+      eyebrow: "Warum es GuardGuide gibt",
+      title: "Weniger Reibungsverlust. Mehr operative Klarheit.",
+      body: "Viele Sicherheitsdienste müssen Planung, Außendienst und Dokumentation noch immer über Papier, Chats, Tabellen und voneinander getrennte Software überbrücken. GuardGuide soll diese Zersplitterung durch eine zusammenhängende operative Oberfläche reduzieren.",
+      points: [
+        "Gebaut für wiederkehrende Objektabläufe statt für generische CRM-Modelle.",
+        "Strukturierte Dokumentation, bevor Compliance- und Prüfdruck teuer wird.",
+        "Öffentliche Entwicklung, sichtbare Roadmap und keine vorgespielte Produktreife.",
+      ],
+    },
+  },
+  principles: {
+    eyebrow: "Grundsätze",
+    headline: "Open Source und operativ ernst gemeint.",
+    intro:
+      "GuardGuide folgt derselben Basis wie die anderen SecPal-Projekte: Open Source, öffentlicher Fortschritt und eine Produktoberfläche, die in der operativen Nutzung verankert bleibt statt in Marketingkulissen.",
+    items: [
+      {
+        name: "AGPLv3",
+        description:
+          "Die öffentliche Website und das umgebende Projekt-Setup stehen als Open Source unter der AGPLv3.",
+      },
+      {
+        name: "Öffentlich entwickelt",
+        description:
+          "Roadmap, Releases und Umsetzungsfortschritt sind in GitHub sichtbar statt hinter Sales-Sprache verborgen.",
+      },
+      {
+        name: "Bewusst fokussiert",
+        description:
+          "GuardGuide bleibt absichtlich eng gefasst: operative Abläufe im deutschen Sicherheitsdienst statt beliebiger Feature-Ausweitung.",
+      },
+    ],
+    link: "Repository ansehen",
+  },
+  roadmapPreview: {
+    eyebrow: "Öffentliche Richtung",
+    headline: "Ein klarer Pfad, ohne so zu tun, als wäre das Produkt schon fertig.",
+    intro:
+      "GuardGuide ist noch früh. Die Roadmap ist öffentlich, damit aktueller Fokus, nächste Schritte und längerfristige Richtung klar nachvollziehbar bleiben.",
+    button: "Vollständige Roadmap öffnen",
+  },
   cta: {
     headline: "Fortschritt statt Marketing-Lärm.",
     subline:

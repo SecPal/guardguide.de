@@ -211,7 +211,8 @@ log "Previous release: $PREVIOUS_TARGET"
 log "Validating nginx configuration"
 validate_nginx_config
 
-assert_redirect "$PRIMARY_URL/" "$PRIMARY_URL/en/"
+assert_locale_redirect "$PRIMARY_URL/" "en-US,en;q=0.9" "$PRIMARY_URL/en/"
+assert_locale_redirect "$PRIMARY_URL/" "de-DE,de;q=0.9,en;q=0.8" "$PRIMARY_URL/de/"
 assert_http_ok "$PRIMARY_URL/en/"
 assert_http_ok "$PRIMARY_URL/de/"
 assert_redirect "$PRIMARY_WWW_URL/" "$PRIMARY_URL/"
