@@ -54,6 +54,71 @@ export const en = {
       },
     ],
   },
+  operations: {
+    eyebrow: "Operational fit",
+    headline:
+      "Built for private security services that need one dependable operating model.",
+    intro:
+      "GuardGuide is aimed at teams that run recurring site operations, patrols, handovers, event documentation, and service instructions under real day-to-day pressure.",
+    items: [
+      {
+        name: "Service instructions where the work happens",
+        description:
+          "Object-specific instructions stay attached to the relevant site, shift, and task instead of living in detached PDFs and message threads.",
+      },
+      {
+        name: "Field-ready workflows for shared devices",
+        description:
+          "The operational surface is being shaped for supervisors, dispatch, and field personnel who often work on shared or constrained devices.",
+      },
+      {
+        name: "Traceable records for incidents and handovers",
+        description:
+          "Incident notes, patrol activity, and shift handovers stay attributable and reviewable instead of being reconstructed later.",
+      },
+    ],
+    panel: {
+      eyebrow: "Why it exists",
+      title: "Less coordination loss. More operational clarity.",
+      body: "Many security teams are still forced to bridge planning, field work, and documentation across paper, chat, spreadsheets, and disconnected software. GuardGuide is meant to reduce that fragmentation with one coherent operating surface.",
+      points: [
+        "Built around routine site operations, not generic CRM abstractions.",
+        "Structured documentation before compliance and audit pressure makes it painful.",
+        "Open development, visible roadmap, and no fake product maturity claims.",
+      ],
+    },
+  },
+  principles: {
+    eyebrow: "Principles",
+    headline: "Open source and operationally serious by default.",
+    intro:
+      "GuardGuide follows the same baseline as the other SecPal projects: open source, public progress, and a product surface that stays grounded in operational use instead of marketing theater.",
+    items: [
+      {
+        name: "AGPLv3",
+        description:
+          "The repository is open source under the AGPLv3. Some integrated Tailwind Plus UI blocks keep their own license terms.",
+      },
+      {
+        name: "Built in public",
+        description:
+          "Roadmap, releases, and implementation progress are visible in GitHub rather than hidden behind sales language.",
+      },
+      {
+        name: "Focused scope",
+        description:
+          "GuardGuide is deliberately narrow: security service operations in Germany, with features added from operational need rather than generic feature sprawl.",
+      },
+    ],
+    link: "View repository",
+  },
+  roadmapPreview: {
+    eyebrow: "Public direction",
+    headline: "A clear path, without pretending the product is finished.",
+    intro:
+      "GuardGuide is still early. The roadmap is public so the current focus, next steps, and longer-term direction stay explicit.",
+    button: "Open full roadmap",
+  },
   cta: {
     headline: "Progress, not marketing noise.",
     subline:

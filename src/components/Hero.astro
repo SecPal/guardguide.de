@@ -70,6 +70,11 @@ const t = useTranslations(locale);
         >
           {t.hero.subline}
         </p>
+        <p
+          class="mx-auto mt-6 max-w-3xl text-base/7 text-gray-600 dark:text-gray-300"
+        >
+          {t.hero.explanation}
+        </p>
         <div class="mt-8 flex items-center justify-center gap-x-4 sm:gap-x-6">
           <a
             href={getLocalizedPath("/roadmap", locale)}
@@ -85,6 +90,36 @@ const t = useTranslations(locale);
             <span aria-hidden="true">→</span>
           </a>
         </div>
+
+        <ul class="mx-auto mt-10 max-w-3xl space-y-3 text-left">
+          {
+            t.hero.highlights.map((highlight) => (
+              <li class="flex gap-x-3">
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class="mt-1 size-5 shrink-0 text-indigo-600 dark:text-indigo-400"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.25 7.312a1 1 0 0 1-1.42-.004l-3-3.062A1 1 0 1 1 6.46 9.55l2.29 2.336 6.54-6.59a1 1 0 0 1 1.414-.006Z"
+                  />
+                </svg>
+                <span class="text-sm/6 text-gray-600 dark:text-gray-300">
+                  {highlight}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p
+          class="mx-auto mt-8 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400"
+        >
+          {t.hero.note}
+        </p>
       </div>
     </div>
 

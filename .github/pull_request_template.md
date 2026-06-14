@@ -26,7 +26,7 @@ Please describe the checks that you ran to verify your changes.
 
 ## Checklist
 
-- [ ] My change follows the repository conventions and domain policy (`secpal.app` / `secpal.dev` only)
+- [ ] My change follows the repository conventions and domain policy (`guardguide.de` and `www.guardguide.de`; no other public domains unless the task explicitly requires them)
 - [ ] I performed a self-review of the affected content, code, and workflows
 - [ ] I updated documentation and `CHANGELOG.md` when required
 - [ ] My change introduces no new warnings in the validations above

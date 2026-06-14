@@ -1,0 +1,75 @@
+---
+// SPDX-FileCopyrightText: 2026 SecPal
+// SPDX-FileCopyrightText: Tailwind Labs Inc.
+// SPDX-License-Identifier: AGPL-3.0-or-later AND LicenseRef-TailwindPlus
+import type { Locale } from "../i18n/index.ts";
+import { getLocalizedPath, useTranslations } from "../i18n/index.ts";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const phases = [
+  { key: "now", accent: "text-indigo-600 dark:text-indigo-400" },
+  { key: "next", accent: "text-violet-600 dark:text-violet-400" },
+  { key: "later", accent: "text-gray-600 dark:text-gray-300" },
+] as const;
+---
+
+<section class="bg-white py-16 sm:py-24 dark:bg-gray-900">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="max-w-3xl">
+      <p class="text-sm/6 font-semibold text-indigo-600 dark:text-indigo-400">
+        {t.roadmapPreview.eyebrow}
+      </p>
+      <h2
+        class="mt-2 text-3xl font-semibold tracking-tight text-balance text-gray-900 sm:text-4xl dark:text-white"
+      >
+        {t.roadmapPreview.headline}
+      </h2>
+      <p class="mt-6 text-base/7 text-gray-600 dark:text-gray-400">
+        {t.roadmapPreview.intro}
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {
+        phases.map(({ key, accent }) => {
+          const phase = t.roadmap[key];
+          return (
+            <div class="rounded-2xl border border-gray-200/80 p-6 dark:border-white/10">
+              <p class={`text-sm/6 font-semibold ${accent}`}>{phase.label}</p>
+              <p class="mt-2 text-sm/6 text-gray-500 dark:text-gray-400">
+                {phase.description}
+              </p>
+              <ul class="mt-6 space-y-4">
+                {phase.items.map((item) => (
+                  <li>
+                    <p class="text-base/7 font-semibold text-gray-900 dark:text-white">
+                      {item.name}
+                    </p>
+                    <p class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">
+                      {item.description}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <div class="mt-10">
+      <a
+        href={getLocalizedPath("/roadmap", locale)}
+        class="text-sm/6 font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+      >
+        {t.roadmapPreview.button}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
