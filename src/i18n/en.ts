@@ -97,7 +97,7 @@ export const en = {
       {
         name: "AGPLv3",
         description:
-          "The public website and surrounding project setup are open source under the AGPLv3.",
+          "The repository is open source under the AGPLv3. Some integrated Tailwind Plus UI blocks keep their own license terms.",
       },
       {
         name: "Built in public",

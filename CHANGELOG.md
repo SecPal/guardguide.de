@@ -16,4 +16,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - fix `security.txt` fallback host from `secpal.app` to `guardguide.de` with GuardGuide-specific disclosure wording
 - replace locale-unaware root redirect check with Accept-Language-aware assertions for `/en/` and `/de/`
 - align repo-local governance files (Copilot instructions overlay, PR template, workflow comments) with `guardguide.de` branding
-- allow `*.preview.secpal.dev` in domain check CI while continuing to block stale `secpal.*` production domains
+- exempt the generated `polyscope.local.json` from the domain check while keeping all public files restricted to `guardguide.de`/`www.guardguide.de`
+- preserve the no-`Accept-Language` root redirect assertion in `check-stable.sh` alongside the locale-aware checks
+- qualify the public AGPLv3 statement on both locale home pages so Tailwind Plus components are not implicitly relicensed

@@ -99,7 +99,7 @@ export const de: Translations = {
       {
         name: "AGPLv3",
         description:
-          "Die öffentliche Website und das umgebende Projekt-Setup stehen als Open Source unter der AGPLv3.",
+          "Das Repository steht als Open Source unter der AGPLv3. Einige eingebundene Tailwind-Plus-UI-Bausteine behalten ihre eigenen Lizenzbedingungen.",
       },
       {
         name: "Öffentlich entwickelt",
