@@ -17,5 +17,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - replace locale-unaware root redirect check with Accept-Language-aware assertions for `/en/` and `/de/`
 - align repo-local governance files (Copilot instructions overlay, PR template, workflow comments) with `guardguide.de` branding
 - exempt the generated `polyscope.local.json` from the domain check while keeping all public files restricted to `guardguide.de`/`www.guardguide.de`
+- harden `check-domains.sh` by skipping exempt files via `grep --exclude` instead of substring filters so a forbidden domain on the same line as an exempt filename can no longer slip through
 - preserve the no-`Accept-Language` root redirect assertion in `check-stable.sh` alongside the locale-aware checks
 - qualify the public AGPLv3 statement on both locale home pages so Tailwind Plus components are not implicitly relicensed

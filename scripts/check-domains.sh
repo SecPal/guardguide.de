@@ -29,15 +29,13 @@ matches=$(grep -r -n -E "(guardguide|secpal)\.[A-Za-z0-9.-]+" \
     --include="*.astro" \
     --include="*.html" \
     --include="*.css" \
+    --exclude="polyscope.local.json" \
+    --exclude="check-domains.sh" \
     --exclude-dir=".git" \
     --exclude-dir="node_modules" \
     --exclude-dir="dist" \
     --exclude-dir=".astro" \
-    --exclude="polyscope.local.json" \
-    . 2>/dev/null | \
-    grep -v -- "check-domains.sh" | \
-    grep -v -- "Forbidden:" | \
-    grep -v -- "FORBIDDEN:" || true)
+    . 2>/dev/null || true)
 
 violations=$(printf '%s\n' "$matches" | \
     grep -Ev '(^|[^A-Za-z0-9.-])guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)|(^|[^A-Za-z0-9.-])guardguide\.de\.git($|[^A-Za-z0-9._-]|\.$)|(^|[^A-Za-z0-9.-])www\.guardguide\.de($|[^A-Za-z0-9._-]|\.[^A-Za-z0-9_-]|\.$)' || true)
