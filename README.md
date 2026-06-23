@@ -12,7 +12,7 @@ Public website for [guardguide.de](https://guardguide.de).
 
 ## Stack
 
-- Astro 6
+- Astro 7
 - Tailwind CSS v4
 - TypeScript
 - Tailwind Plus components under the existing SecPal licensing model
