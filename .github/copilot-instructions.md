@@ -75,7 +75,7 @@ At minimum verify:
 
 ## Repository Conventions
 
-- Stack: Node 22, Astro 6, Tailwind CSS v4, and TypeScript strict mode.
+- Stack: Node 22, Astro 7, Tailwind CSS v4, and TypeScript strict mode.
 - This repository is the public GuardGuide landing page and static marketing site.
 - Keep content and presentation close to the page or component that uses them.
 - Favor static rendering, minimal client-side JavaScript, semantic HTML, accessibility, and responsive layouts.
