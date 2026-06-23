@@ -20,4 +20,4 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - harden `check-domains.sh` by skipping exempt files via `grep --exclude` instead of substring filters so a forbidden domain on the same line as an exempt filename can no longer slip through
 - preserve the no-`Accept-Language` root redirect assertion in `check-stable.sh` alongside the locale-aware checks
 - qualify the public AGPLv3 statement on both locale home pages so Tailwind Plus components are not implicitly relicensed
-- override vulnerable transitive `brace-expansion`, `esbuild`, `js-yaml`, and `vite` versions so `npm audit` reports zero vulnerabilities without requiring an Astro major upgrade
+- upgrade to Astro 7 and pin vulnerable transitive `brace-expansion` and `js-yaml` versions exactly so `npm audit` reports zero vulnerabilities without unsupported semver overrides
