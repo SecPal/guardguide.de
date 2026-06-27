@@ -28,8 +28,8 @@ repos:
       - id: markdownlint
         name: markdownlint
         entry: >-
-          npx --yes --package markdownlint-cli@0.49.0 markdownlint --config
-          .markdownlint.json
+          npx --yes --package markdownlint-cli@0.49.0 markdownlint --dot
+          --config .markdownlint.json
         language: system
         types: [markdown]
 
