@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
+- correct the workflow-governance rule so reusable-workflow caller jobs are exempt from impossible caller-level `timeout-minutes` settings and keep timeout enforcement inside the called reusable workflows
 - bootstrap the public `guardguide.de` Astro site from the existing SecPal website stack
 - switch repository metadata, deployment scripts, and public legal/security pages to `guardguide.de`
 - remove the copied Android distribution surface so this repository stays scoped to the GuardGuide promo site
