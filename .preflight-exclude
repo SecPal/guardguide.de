@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 SecPal
+# SPDX-License-Identifier: CC0-1.0
+
+# Match full `git diff --numstat` rows for the generated npm lockfile.
+^[0-9-]+[[:space:]]+[0-9-]+[[:space:]]+package-lock\.json$

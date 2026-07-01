@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
+- exclude the generated `package-lock.json` from PR size accounting so Astro dependency updates no longer fail CI on lockfile churn alone and local preflight matches the shared workflow logic
 - replace the repo-local `markdownlint-cli2` pre-commit and preflight path with pinned `markdownlint-cli@0.49.0` usage and remove the stale `cli2` file references from export/licensing metadata
 - align the provider-neutral governance baseline with the actual repo validation surface by advertising the workflow overlay in `AGENTS.md`/the Copilot mirror and by documenting `npm test` as part of validate-first when changes are covered by the existing Node test suite
 - correct the workflow-governance rule so reusable-workflow caller jobs are exempt from impossible caller-level `timeout-minutes` settings and keep timeout enforcement inside the called reusable workflows

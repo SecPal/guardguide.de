@@ -139,24 +139,66 @@ fi
 echo "✅ All commits are signed"
 
 # 3) PR Size Check
-DIFF_STAT=$(git diff --shortstat origin/"$BASE"...HEAD 2>/dev/null || echo "")
-if [ -n "$DIFF_STAT" ]; then
-  LINES_CHANGED=$(git diff --stat origin/"$BASE"...HEAD 2>/dev/null | tail -1 | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo "0")
-  DELETIONS=$(git diff --stat origin/"$BASE"...HEAD 2>/dev/null | tail -1 | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo "0")
-  TOTAL_CHANGES=$((LINES_CHANGED + DELETIONS))
+MERGE_BASE=$(git merge-base "origin/$BASE" HEAD 2>/dev/null || echo "")
+RAW_DIFF_OUTPUT=""
+DIFF_OUTPUT=""
+if [ -n "$MERGE_BASE" ]; then
+  RAW_DIFF_OUTPUT=$(git diff --numstat "$MERGE_BASE"..HEAD 2>/dev/null || echo "")
+  DIFF_OUTPUT="$RAW_DIFF_OUTPUT"
+fi
+
+if [ -n "$RAW_DIFF_OUTPUT" ]; then
   MAX_LINES=600
 
-  # Allow override via local file
+  if [ -f ".preflight-exclude" ]; then
+    EXCLUDE_PATTERNS=$(grep -vE '^[[:space:]]*(#|$)' ".preflight-exclude" | tr -d '\r' || true)
+
+    if [ -n "$EXCLUDE_PATTERNS" ]; then
+      EXCLUDE_REGEX=$(echo "$EXCLUDE_PATTERNS" | tr '\n' '|' | sed 's/|$//')
+
+      set +e
+      echo "" | grep -qE -- "$EXCLUDE_REGEX" 2>/dev/null
+      GREP_EXIT=$?
+      set -e
+
+      if [ "$GREP_EXIT" -ne 2 ]; then
+        if echo "test-file.txt" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "another-file.js" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "random.md" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "README.md" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "package.json" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo ".hidden" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "File123.py" | grep -qE -- "$EXCLUDE_REGEX" && \
+           echo "UPPERCASE" | grep -qE -- "$EXCLUDE_REGEX"; then
+          echo "⚠️  .preflight-exclude contains pattern that matches everything" >&2
+          echo "This will exclude all files from PR size calculation!" >&2
+        fi
+      else
+        echo "⚠️  .preflight-exclude contains invalid regex pattern(s)" >&2
+        echo "The pattern will be ignored. Please check your .preflight-exclude file." >&2
+      fi
+
+      DIFF_OUTPUT=$(echo "$DIFF_OUTPUT" | grep -vE -- "$EXCLUDE_REGEX" 2>/dev/null || true)
+    fi
+  fi
+
   if [ -f ".preflight-allow-large-pr" ]; then
     echo "⚠️  Large PR override active (.preflight-allow-large-pr). Document the reason in your PR."
-  elif [ "$TOTAL_CHANGES" -gt "$MAX_LINES" ]; then
-    echo ""
-    echo "⚠️  WARNING: PR is large (${TOTAL_CHANGES} lines changed, limit is ${MAX_LINES})"
-    echo "Consider splitting this into smaller PRs."
-    echo "To override: touch .preflight-allow-large-pr (do NOT commit)"
-    echo ""
+  elif [ -z "$DIFF_OUTPUT" ]; then
+    echo "⚠️  Warning: All changed files were excluded by filters"
+    echo "✅ PR size OK (all changes are auto-generated/excluded)"
   else
-    echo "✅ PR size OK (${TOTAL_CHANGES}/${MAX_LINES} lines)"
+    TOTAL_CHANGES=$(echo "$DIFF_OUTPUT" | awk '{ins+=$1; del+=$2} END {print ins+del+0}')
+
+    if [ "$TOTAL_CHANGES" -gt "$MAX_LINES" ]; then
+      echo ""
+      echo "⚠️  WARNING: PR is large (${TOTAL_CHANGES} lines changed, limit is ${MAX_LINES})"
+      echo "Consider splitting this into smaller PRs."
+      echo "To override: touch .preflight-allow-large-pr (do NOT commit)"
+      echo ""
+    else
+      echo "✅ PR size OK (${TOTAL_CHANGES}/${MAX_LINES} lines)"
+    fi
   fi
 fi
 
