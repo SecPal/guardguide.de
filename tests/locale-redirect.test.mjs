@@ -21,5 +21,8 @@ test("buildPreferredLocalePath keeps neutral entry routes locale-aware", () => {
   assert.equal(buildPreferredLocalePath("/", ["de-DE"]), "/de/");
   assert.equal(buildPreferredLocalePath("/", ["en-GB"]), "/en/");
   assert.equal(buildPreferredLocalePath("/roadmap", ["de-AT"]), "/de/roadmap/");
-  assert.equal(buildPreferredLocalePath("/security/", ["fr-FR"]), "/en/security/");
+  assert.equal(
+    buildPreferredLocalePath("/security/", ["fr-FR"]),
+    "/en/security/"
+  );
 });
