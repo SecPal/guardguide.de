@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
+- replace the mirror-managed Prettier pre-commit hook with the repository-local Prettier dependency so hook setup works with npm 12
 - replace the stub `LICENSES/LicenseRef-TailwindPlus.txt` summary with the approved published Tailwind Plus license text so the centralized license-compatibility CI check passes again
 - align the CodeQL workflow on a single pinned `github/codeql-action` `v4.37.0` revision so Dependabot no longer leaves `init`, `autobuild`, and `analyze` on mixed action versions that can break CI
 - exclude the generated `package-lock.json` from PR size accounting so Astro dependency updates no longer fail CI on lockfile churn alone and local preflight matches the shared workflow logic
