@@ -101,7 +101,7 @@ RELEASE_DIR="$RELEASES_DIR/$RELEASE_ID"
 TARGET_DIST_DIR="$RELEASE_DIR/dist"
 
 log "Installing dependencies"
-npm ci
+npm ci --include=dev
 
 log "Building release for $SITE_URL"
 GUARDGUIDE_SITE_URL="$SITE_URL" npm run build

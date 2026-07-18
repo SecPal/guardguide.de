@@ -93,7 +93,7 @@ fi
 # 1) Node.js / Astro
 if [ -f package.json ] && command -v npm >/dev/null 2>&1; then
   echo "Installing dependencies..."
-  npm ci --silent
+  npm ci --silent --include=dev
 
   echo "Running Astro TypeScript check..."
   npm run check || {

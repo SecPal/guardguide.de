@@ -6,6 +6,18 @@ set -euo pipefail
 
 echo "🔧 Setting up pre-commit hooks for SecPal..."
 
+# Work from the repository root so npm and pre-commit use the tracked config.
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Check if npm is installed
+if ! command -v npm &>/dev/null; then
+  echo "❌ npm is not installed."
+  echo ""
+  echo "Install Node.js 22 with npm, then run this script again."
+  exit 1
+fi
+
 # Check if pre-commit is installed
 if ! command -v pre-commit &>/dev/null; then
   echo "❌ pre-commit is not installed."
@@ -23,6 +35,10 @@ if ! command -v pre-commit &>/dev/null; then
   echo ""
   exit 1
 fi
+
+# Install the locked repository dependencies used by local hooks.
+echo "📦 Installing locked npm dependencies..."
+npm ci --include=dev
 
 # Install pre-commit hooks
 echo "📦 Installing pre-commit hooks..."
