@@ -17,6 +17,11 @@ import test from "node:test";
 
 const repositoryRoot = new URL("../", import.meta.url);
 const setupScript = new URL("../scripts/setup-pre-commit.sh", import.meta.url);
+const nodeToolchainScripts = [
+  new URL("../scripts/setup-pre-commit.sh", import.meta.url),
+  new URL("../scripts/preflight.sh", import.meta.url),
+  new URL("../scripts/release-stable.sh", import.meta.url),
+];
 
 test("npm install-script policy approves required platform install scripts", () => {
   const packageManifest = JSON.parse(
@@ -36,6 +41,15 @@ test("Prettier hook requires the repository-local installation", () => {
   );
 
   assert.match(preCommitConfig, /entry: node_modules\/.bin\/prettier --write/);
+});
+
+test("Node toolchain scripts install development dependencies explicitly", () => {
+  for (const script of nodeToolchainScripts) {
+    assert.match(
+      readFileSync(script, "utf8"),
+      /npm ci(?: --silent)? --include=dev/
+    );
+  }
 });
 
 test("pre-commit setup installs locked npm dependencies before running hooks", () => {
@@ -70,7 +84,7 @@ test("pre-commit setup installs locked npm dependencies before running hooks", (
 
     assert.equal(result.status, 0, result.stderr || result.stdout);
     assert.deepEqual(readFileSync(callLog, "utf8").trim().split("\n"), [
-      "npm ci",
+      "npm ci --include=dev",
       "pre-commit install --install-hooks",
       "pre-commit run --all-files",
     ]);

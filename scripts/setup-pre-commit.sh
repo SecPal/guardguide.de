@@ -38,7 +38,7 @@ fi
 
 # Install the locked repository dependencies used by local hooks.
 echo "📦 Installing locked npm dependencies..."
-npm ci
+npm ci --include=dev
 
 # Install pre-commit hooks
 echo "📦 Installing pre-commit hooks..."
