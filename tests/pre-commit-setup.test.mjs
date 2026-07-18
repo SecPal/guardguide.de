@@ -18,14 +18,24 @@ import test from "node:test";
 const repositoryRoot = new URL("../", import.meta.url);
 const setupScript = new URL("../scripts/setup-pre-commit.sh", import.meta.url);
 
-test("npm install-script policy pins the required esbuild postinstall", () => {
+test("npm install-script policy approves required platform install scripts", () => {
   const packageManifest = JSON.parse(
     readFileSync(new URL("../package.json", import.meta.url), "utf8")
   );
 
   assert.deepEqual(packageManifest.allowScripts, {
     "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true,
   });
+});
+
+test("Prettier hook requires the repository-local installation", () => {
+  const preCommitConfig = readFileSync(
+    new URL("../.pre-commit-config.yaml", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(preCommitConfig, /entry: node_modules\/.bin\/prettier --write/);
 });
 
 test("pre-commit setup installs locked npm dependencies before running hooks", () => {
