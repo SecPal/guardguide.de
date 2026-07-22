@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
+- align all CodeQL steps on the same pinned `github/codeql-action` `v4.37.2` revision so the analyzer can load its matching configuration
 - replace the mirror-managed Prettier pre-commit hook with the repository-local Prettier dependency, explicitly install development dependencies for hook, preflight, and release tooling, and approve required esbuild and macOS fsevents install scripts so clean-clone setup works without npm 12 warnings
 - replace the stub `LICENSES/LicenseRef-TailwindPlus.txt` summary with the approved published Tailwind Plus license text so the centralized license-compatibility CI check passes again
 - align the CodeQL workflow on a single pinned `github/codeql-action` `v4.37.0` revision so Dependabot no longer leaves `init`, `autobuild`, and `analyze` on mixed action versions that can break CI
