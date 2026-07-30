@@ -147,10 +147,7 @@ if [ -n "$MERGE_BASE" ]; then
   DIFF_OUTPUT="$RAW_DIFF_OUTPUT"
 fi
 
-if [ -n "$RAW_DIFF_OUTPUT" ]; then
-  MAX_LINES=600
-
-  if [ -f ".preflight-exclude" ]; then
+if [ -f ".preflight-exclude" ]; then
     EXCLUDE_PATTERNS=$(grep -vE '^[[:space:]]*(#|$)' ".preflight-exclude" | tr -d '\r' || true)
 
     if [ -n "$EXCLUDE_PATTERNS" ]; then
@@ -173,33 +170,30 @@ if [ -n "$RAW_DIFF_OUTPUT" ]; then
           echo "⚠️  .preflight-exclude contains pattern that matches everything" >&2
           echo "This will exclude all files from PR size calculation!" >&2
         fi
+
+        DIFF_OUTPUT=$(echo "$DIFF_OUTPUT" | grep -vE -- "$EXCLUDE_REGEX" 2>/dev/null || true)
       else
         echo "⚠️  .preflight-exclude contains invalid regex pattern(s)" >&2
         echo "The pattern will be ignored. Please check your .preflight-exclude file." >&2
       fi
-
-      DIFF_OUTPUT=$(echo "$DIFF_OUTPUT" | grep -vE -- "$EXCLUDE_REGEX" 2>/dev/null || true)
     fi
-  fi
+fi
 
-  if [ -f ".preflight-allow-large-pr" ]; then
-    echo "⚠️  Large PR override active (.preflight-allow-large-pr). Document the reason in your PR."
-  elif [ -z "$DIFF_OUTPUT" ]; then
-    echo "⚠️  Warning: All changed files were excluded by filters"
-    echo "✅ PR size OK (all changes are auto-generated/excluded)"
-  else
-    TOTAL_CHANGES=$(echo "$DIFF_OUTPUT" | awk '{ins+=$1; del+=$2} END {print ins+del+0}')
+PR_SIZE_ADVISORY_THRESHOLD=600
+if [ -n "$RAW_DIFF_OUTPUT" ] && [ -z "$DIFF_OUTPUT" ]; then
+  echo "⚠️  All changed files are excluded (lock files, license files, etc.)" >&2
+fi
+INSERTIONS=$(echo "$DIFF_OUTPUT" | awk '{ins+=$1} END {print ins+0}')
+DELETIONS=$(echo "$DIFF_OUTPUT" | awk '{del+=$2} END {print del+0}')
+TOTAL_CHANGES=$((INSERTIONS + DELETIONS))
+SIZE_REPORT="PR size: $TOTAL_CHANGES changed lines ($INSERTIONS insertions, $DELETIONS deletions; advisory threshold: $PR_SIZE_ADVISORY_THRESHOLD)"
 
-    if [ "$TOTAL_CHANGES" -gt "$MAX_LINES" ]; then
-      echo ""
-      echo "⚠️  WARNING: PR is large (${TOTAL_CHANGES} lines changed, limit is ${MAX_LINES})"
-      echo "Consider splitting this into smaller PRs."
-      echo "To override: touch .preflight-allow-large-pr (do NOT commit)"
-      echo ""
-    else
-      echo "✅ PR size OK (${TOTAL_CHANGES}/${MAX_LINES} lines)"
-    fi
-  fi
+if [ "$TOTAL_CHANGES" -gt "$PR_SIZE_ADVISORY_THRESHOLD" ]; then
+  echo "$SIZE_REPORT" >&2
+  echo "WARNING: PR size advisory threshold exceeded." >&2
+  echo "Keep this pull request focused on one logical topic and make the review plan explicit." >&2
+else
+  echo "Preflight OK · $SIZE_REPORT"
 fi
 
 echo ""
