@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
-- update the vulnerable transitive `brace-expansion` and `fast-uri` releases so `npm audit` reports zero findings
+- update transitive `brace-expansion` from 5.0.8 to 5.0.9 and `fast-uri` from 3.1.4 to 3.1.5 so `npm audit` reports zero findings
 - refresh vulnerable transitive dependencies and remove stale `brace-expansion` and `js-yaml` overrides so each consumer can resolve a patched, semver-compatible release
 - align all CodeQL steps on the same pinned `github/codeql-action` `v4.37.2` revision so the analyzer can load its matching configuration
 - replace the mirror-managed Prettier pre-commit hook with the repository-local Prettier dependency, explicitly install development dependencies for hook, preflight, and release tooling, and approve required esbuild and macOS fsevents install scripts so clean-clone setup works without npm 12 warnings
