@@ -2,24 +2,25 @@
 # SPDX-FileCopyrightText: 2026 SecPal
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: guardguide.de Runtime Overlay
-description: Reinforces strict GuardGuide repository governance for all files in this repo.
+description: Applies GuardGuide-specific constraints across this repository.
 applyTo: "**"
 ---
 
 # guardguide.de Runtime Overlay
 
-This file auto-applies to all files in this repo so strict GuardGuide governance stays always present at runtime.
+Root `AGENTS.md` is authoritative for repository-specific constraints.
+`.github/copilot-instructions.md` is non-authoritative. The canonical
+[SecPal work-graph contract](https://github.com/SecPal/.github/blob/main/docs/work-graph-contract.md)
+solely owns generic governance semantics.
 
-- `AGENTS.md` is the authoritative runtime baseline for this repo.
-  `.github/copilot-instructions.md` is only a compatibility mirror.
-- Non-negotiable: TDD first, quality first, 1 topic = 1 PR = 1 branch,
-  immediate GitHub issue creation for every real out-of-scope finding, and no
-  bypass.
-- If work needs more than one PR, or probably will, create an EPIC with linked
-  sub-issues before implementation.
-- Design discipline is always-on: DRY, KISS, YAGNI, SOLID, and fail fast.
-- GitHub communication stays in English and uses file and line references instead of large verbatim code quotes.
-- Do not add AI self-references, generated-by text, tool promotion, or AI
-  attribution unless the task explicitly requires documenting AI tooling.
-- Keep changes repo-local, minimal, and consistent with Astro, Tailwind CSS, and static-site conventions.
-- Apply the GuardGuide domain policy and immediate warning and issue triage rules from the repo baseline.
+- Keep changes consistent with the Node 22, Astro 7, Tailwind CSS v4, strict
+  TypeScript, static-first architecture.
+- Preserve semantic HTML, accessibility, responsive behavior, minimal client
+  JavaScript, and static-build guarantees.
+- Enforce the `guardguide.de` apex, `www.guardguide.de` redirect, and
+  `guardguide.de` email policy; do not add unrelated domains without explicit
+  scope.
+- Prefer Astro built-ins and existing repository patterns before dependencies or
+  runtime code.
+- Do not force-push or bypass safeguards. Preserve required commit signing and
+  applicable SPDX/REUSE compliance.
