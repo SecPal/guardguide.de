@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## Unreleased
 
+- pin every external workflow reference to its source ref's full commit SHA and enforce the invariant with focused regression coverage
 - refresh vulnerable transitive dependencies and remove stale `brace-expansion` and `js-yaml` overrides so each consumer can resolve a patched, semver-compatible release
 - align all CodeQL steps on the same pinned `github/codeql-action` `v4.37.2` revision so the analyzer can load its matching configuration
 - replace the mirror-managed Prettier pre-commit hook with the repository-local Prettier dependency, explicitly install development dependencies for hook, preflight, and release tooling, and approve required esbuild and macOS fsevents install scripts so clean-clone setup works without npm 12 warnings
