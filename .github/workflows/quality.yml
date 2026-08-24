@@ -42,14 +42,14 @@ jobs:
 
   astro-check:
     name: Astro TypeScript Check
-    uses: SecPal/.github/.github/workflows/reusable-node-build.yml@e7311834582dc0edd56639cd8e234a6c62ebfcfa # main
+    uses: SecPal/.github/.github/workflows/reusable-node-build.yml@d56bd229c11848ac9231023cd49f1e968486c94e # main
     with:
       node-version: "22"
       build-command: "npm run check"
 
   build:
     name: Astro Build
-    uses: SecPal/.github/.github/workflows/reusable-node-build.yml@e7311834582dc0edd56639cd8e234a6c62ebfcfa # main
+    uses: SecPal/.github/.github/workflows/reusable-node-build.yml@d56bd229c11848ac9231023cd49f1e968486c94e # main
     with:
       node-version: "22"
       build-command: "npm run build"
